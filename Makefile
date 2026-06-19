@@ -4,6 +4,7 @@ ANVIL_RPC_URL ?= http://127.0.0.1:8545
 ANVIL_DEPLOYER_ACCOUNT ?= anvilDeployer
 SEPOLIA_DEPLOYER_ACCOUNT ?= sepoliaDeployer
 DEPLOY_SCRIPT := script/DeployRaise.s.sol:DeployRaiseScript
+RAISE_CONTRACT := src/Raise.sol
 
 .PHONY: install forge-install clean build fmt test coverage gas-report snapshot snapshot-check storage-layout dry-deploy-anvil deploy-anvil dry-deploy-sepolia deploy-sepolia
 
@@ -28,7 +29,7 @@ test:
 	forge test
 
 coverage:
-	forge coverage --contracts src --match-contract "SimpleStorage|StorageFactory" \
+	forge coverage --contracts src --match-contract "Raise" \
 	--no-match-coverage "script/|test/|src/examples/"
 
 gas-report:
@@ -41,8 +42,7 @@ snapshot-check:
 	forge snapshot --check
 
 storage-layout:
-	forge inspect src/SimpleStorage.sol:SimpleStorage storageLayout
-	forge inspect src/StorageFactory.sol:StorageFactory storageLayout
+	forge inspect $(RAISE_CONTRACT):Raise storageLayout
 
 dry-deploy-anvil:
 	forge script $(DEPLOY_SCRIPT) \
